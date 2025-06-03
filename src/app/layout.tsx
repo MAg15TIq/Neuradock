@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/ui/theme-toggle";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { SkipLinks } from "@/components/ui/skip-link";
 import { KeyboardShortcutsProvider } from "@/components/ui/keyboard-shortcuts-provider";
+import { ScriptManagerProvider } from "@/components/ui/script-manager";
+import { ThemeScript } from "@/components/ui/script-handler";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,19 +29,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <SkipLinks />
-        <ThemeProvider defaultTheme="system" storageKey="neuradock-theme">
-          <KeyboardShortcutsProvider>
-            <ErrorBoundary>
-              <Navigation />
-              <main id="main-content" className="min-h-screen" tabIndex={-1}>
-                {children}
-              </main>
-              <Footer />
-            </ErrorBoundary>
-          </KeyboardShortcutsProvider>
-        </ThemeProvider>
+        <ScriptManagerProvider>
+          <ThemeProvider defaultTheme="system" storageKey="neuradock-theme">
+            <KeyboardShortcutsProvider>
+              <ErrorBoundary>
+                <Navigation />
+                <main id="main-content" className="min-h-screen" tabIndex={-1}>
+                  {children}
+                </main>
+                <Footer />
+              </ErrorBoundary>
+            </KeyboardShortcutsProvider>
+          </ThemeProvider>
+        </ScriptManagerProvider>
       </body>
     </html>
   );
