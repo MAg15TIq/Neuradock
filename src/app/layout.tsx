@@ -30,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="netpub_831b33a650047ee11a992b11fdadd8f3" content="831b33a650047ee11a992b11fdadd8f3_232c7b7723dc94b3a1e3e0dab2fabde6" />
         <ThemeScript />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
