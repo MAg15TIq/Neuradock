@@ -8,7 +8,7 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { SkipLinks } from "@/components/ui/skip-link";
 import { KeyboardShortcutsProvider } from "@/components/ui/keyboard-shortcuts-provider";
 import { ScriptManagerProvider } from "@/components/ui/script-manager";
-import { ThemeScript } from "@/components/ui/script-handler";
+import { ThemeScript, ScriptHandler } from "@/components/ui/script-handler";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -48,6 +48,14 @@ export default function RootLayout({
             </KeyboardShortcutsProvider>
           </ThemeProvider>
         </ScriptManagerProvider>
+
+        {/* GDPR Compliance Script - Required for EU data protection compliance */}
+        <ScriptHandler
+          src="https://fstatic.netpub.media/extra/cmp/cmp-gdpr.js"
+          strategy="beforeInteractive"
+          defer
+          id="gdpr-compliance-script"
+        />
       </body>
     </html>
   );
