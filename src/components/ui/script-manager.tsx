@@ -75,7 +75,7 @@ export function ScriptManagerProvider({ children }: { children: ReactNode }) {
         resolve();
       };
 
-      script.onerror = (event) => {
+      script.onerror = () => {
         const error = new Error(`Failed to load script: ${src}`);
         setScripts(prev => ({
           ...prev,

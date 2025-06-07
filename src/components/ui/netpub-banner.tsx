@@ -57,7 +57,7 @@ export function NetpubBanner({
   const bannerId = containerId || `netpub-banner-slot-${slot}`;
 
   // Build the ins element attributes
-  const insAttributes: Record<string, any> = {
+  const insAttributes: Record<string, string | number | React.CSSProperties> = {
     className: bannerClass,
     'data-sizes-desktop': desktopSizes,
     'data-sizes-mobile': mobileSizes,

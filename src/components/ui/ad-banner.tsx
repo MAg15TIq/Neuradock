@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface AdBannerProps {
-  /** Banner size - currently supports 120x600 */
-  size?: '120x600';
   /** Placement identifier for analytics */
   placement?: string;
   /** Additional CSS classes */
@@ -23,7 +21,6 @@ export interface AdBannerProps {
  * and performance optimization.
  */
 export function AdBanner({
-  size = '120x600',
   placement = 'sidebar',
   className,
   showOnMobile = false,

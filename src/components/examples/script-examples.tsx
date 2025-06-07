@@ -1,6 +1,6 @@
 'use client';
 
-import { ScriptHandler, useScript } from '@/components/ui/script-handler';
+import { ScriptHandler } from '@/components/ui/script-handler';
 import { useExternalScript, useInlineScript, useScriptManager } from '@/components/ui/script-manager';
 import { useEffect, useState } from 'react';
 
@@ -16,9 +16,9 @@ export function GoogleAnalyticsExample() {
       async: true,
       onLoad: () => {
         // Initialize Google Analytics after script loads
-        (window as any).dataLayer = (window as any).dataLayer || [];
-        function gtag(...args: any[]) {
-          (window as any).dataLayer.push(args);
+        (window as unknown as { dataLayer: unknown[] }).dataLayer = (window as unknown as { dataLayer: unknown[] }).dataLayer || [];
+        function gtag(...args: unknown[]) {
+          (window as unknown as { dataLayer: unknown[] }).dataLayer.push(args);
         }
         gtag('js', new Date());
         gtag('config', 'GA_MEASUREMENT_ID');

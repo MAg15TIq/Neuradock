@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, AlertCircle, Code, Zap } from "lucide-react";
+import { CheckCircle, Code, Zap } from "lucide-react";
 import { 
   DirectScriptExample, 
   ChartJSExample, 

@@ -145,31 +145,31 @@ export function QuickUsageExamples() {
       
       <div className="space-y-2 text-sm font-mono">
         <div>
-          <span className="text-gray-600 dark:text-gray-400">// Slot 3 - IAB Banner</span>
+          <span className="text-gray-600 dark:text-gray-400">{/* Slot 3 - IAB Banner */}</span>
           <br />
           <span>&lt;NetpubIABBanner slot={3} /&gt;</span>
         </div>
-        
+
         <div>
-          <span className="text-gray-600 dark:text-gray-400">// Slot 4 - Fixed Leaderboard</span>
+          <span className="text-gray-600 dark:text-gray-400">{/* Slot 4 - Fixed Leaderboard */}</span>
           <br />
           <span>&lt;NetpubFixedLeaderboard slot={4} /&gt;</span>
         </div>
-        
+
         <div>
-          <span className="text-gray-600 dark:text-gray-400">// Slot 5 - Notification Banner</span>
+          <span className="text-gray-600 dark:text-gray-400">{/* Slot 5 - Notification Banner */}</span>
           <br />
           <span>&lt;NetpubNotificationBanner slot={5} /&gt;</span>
         </div>
 
         <div>
-          <span className="text-gray-600 dark:text-gray-400">// Slot 6 - IAB 360x100 Banner</span>
+          <span className="text-gray-600 dark:text-gray-400">{/* Slot 6 - IAB 360x100 Banner */}</span>
           <br />
           <span>&lt;NetpubSlot6Banner slot={6} /&gt;</span>
         </div>
-        
+
         <div>
-          <span className="text-gray-600 dark:text-gray-400">// With placement wrapper</span>
+          <span className="text-gray-600 dark:text-gray-400">{/* With placement wrapper */}</span>
           <br />
           <span>&lt;BannerPlacement position="center"&gt;</span>
           <br />

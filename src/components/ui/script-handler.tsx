@@ -19,7 +19,7 @@ export interface ScriptHandlerProps {
   /** Whether to execute on server-side (for inline scripts) */
   executeOnServer?: boolean;
   /** Additional script attributes */
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -121,7 +121,7 @@ export function useScript(src: string, options?: {
       options?.onLoad?.();
     };
 
-    script.onerror = (event) => {
+    script.onerror = () => {
       const error = new Error(`Failed to load script: ${src}`);
       setError(error);
       options?.onError?.(error);
