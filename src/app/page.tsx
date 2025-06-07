@@ -5,6 +5,7 @@ import { ArticleCard } from "@/components/ui/article-card";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { FadeIn, StaggeredFadeIn } from "@/components/ui/animations";
 import { ContentDiscovery } from "@/components/ui/content-discovery";
+import { SidebarLayout } from "@/components/layout/sidebar-layout";
 import { getFeaturedArticles } from "@/lib/articles";
 import { CATEGORIES } from "@/types/article";
 import { ArrowRight, BookOpen, TrendingUp, GraduationCap, Briefcase, Sparkles, Zap } from "lucide-react";
@@ -120,21 +121,23 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredArticles.map((article) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                description={article.description}
-                slug={article.slug}
-                category={article.category}
-                date={new Date(article.publishedAt).toLocaleDateString()}
-                readTime={`${article.readTime} min`}
-                author={article.author}
-                image={article.heroImage}
-              />
-            ))}
-          </div>
+          <SidebarLayout showAds={true}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+              {featuredArticles.map((article) => (
+                <ArticleCard
+                  key={article.slug}
+                  title={article.title}
+                  description={article.description}
+                  slug={article.slug}
+                  category={article.category}
+                  date={new Date(article.publishedAt).toLocaleDateString()}
+                  readTime={`${article.readTime} min`}
+                  author={article.author}
+                  image={article.heroImage}
+                />
+              ))}
+            </div>
+          </SidebarLayout>
         </div>
       </section>
 

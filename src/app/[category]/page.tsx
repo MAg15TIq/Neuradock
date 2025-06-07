@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/ui/article-card";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { CategoryLayout } from "@/components/layout/sidebar-layout";
 import { getArticlesByCategory } from "@/lib/articles";
 import { CATEGORIES } from "@/types/article";
 import { ArrowLeft } from "lucide-react";
@@ -59,33 +60,35 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </div>
 
-        {/* Articles Grid */}
-        {articles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => (
-              <ArticleCard
-                key={article.slug}
-                title={article.title}
-                description={article.description}
-                slug={article.slug}
-                category={category}
-                date={new Date(article.publishedAt).toLocaleDateString()}
-                readTime={`${article.readTime} min`}
-                author={article.author}
-                image={article.heroImage}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No articles found
-            </h3>
-            <p className="text-gray-600">
-              Articles for this category will be added soon.
-            </p>
-          </div>
-        )}
+        {/* Articles Grid with Sidebar */}
+        <CategoryLayout showAds={true}>
+          {articles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+              {articles.map((article) => (
+                <ArticleCard
+                  key={article.slug}
+                  title={article.title}
+                  description={article.description}
+                  slug={article.slug}
+                  category={category}
+                  date={new Date(article.publishedAt).toLocaleDateString()}
+                  readTime={`${article.readTime} min`}
+                  author={article.author}
+                  image={article.heroImage}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No articles found
+              </h3>
+              <p className="text-gray-600">
+                Articles for this category will be added soon.
+              </p>
+            </div>
+          )}
+        </CategoryLayout>
       </div>
     </div>
   );

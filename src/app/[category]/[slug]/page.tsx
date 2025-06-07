@@ -8,6 +8,7 @@ import { ReadingProgress, ScrollToTop, TableOfContents, EstimatedReadTime } from
 import { SocialShare } from "@/components/ui/social-share";
 import { FadeIn } from "@/components/ui/animations";
 import { OptimizedImage } from "@/components/ui/optimized-image";
+import { ArticleLayout } from "@/components/layout/sidebar-layout";
 import { ArrowLeft, Clock, User, Calendar, Tag } from "lucide-react";
 
 interface ArticlePageProps {
@@ -163,41 +164,34 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           variant="floating"
         />
 
-        {/* Article Content with Table of Contents */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Table of Contents - Desktop Sidebar */}
+        {/* Article Content with Sidebar Layout */}
+        <ArticleLayout
+          tableOfContents={headings.length > 0 ? (
+            <Card className="p-4">
+              <TableOfContents headings={headings} />
+            </Card>
+          ) : undefined}
+          showAds={true}
+        >
+          {/* Table of Contents - Mobile */}
           {headings.length > 0 && (
-            <div className="hidden lg:block lg:col-span-1">
-              <div className="sticky top-8">
-                <Card className="p-4">
-                  <TableOfContents headings={headings} />
-                </Card>
-              </div>
+            <div className="lg:hidden mb-8">
+              <Card className="p-4">
+                <TableOfContents headings={headings} />
+              </Card>
             </div>
           )}
 
-          {/* Main Article Content */}
-          <div className={`${headings.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
-            {/* Table of Contents - Mobile */}
-            {headings.length > 0 && (
-              <div className="lg:hidden mb-8">
-                <Card className="p-4">
-                  <TableOfContents headings={headings} />
-                </Card>
-              </div>
-            )}
-
-            <FadeIn delay={200}>
-              <article className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-li:text-gray-700">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: article.content
-                  }}
-                />
-              </article>
-            </FadeIn>
-          </div>
-        </div>
+          <FadeIn delay={200}>
+            <article className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-li:text-gray-700">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: article.content
+                }}
+              />
+            </article>
+          </FadeIn>
+        </ArticleLayout>
 
         {/* Tags Section */}
         {article.tags.length > 0 && (

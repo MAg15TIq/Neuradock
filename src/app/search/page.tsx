@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getAllArticles } from "@/lib/articles";
+import { SearchLayout } from "@/components/layout/sidebar-layout";
 import { ArrowLeft } from "lucide-react";
 import { SearchWrapper } from "./search-wrapper";
 
@@ -30,8 +31,10 @@ export default function SearchPage() {
           <p className="text-xl text-muted-foreground">Find insights across Finance, Technology, Education, and Business</p>
         </div>
 
-        {/* Client Component for Search Functionality */}
-        <SearchWrapper articles={allArticles} tags={allTags} />
+        {/* Client Component for Search Functionality with Sidebar */}
+        <SearchLayout showAds={true}>
+          <SearchWrapper articles={allArticles} tags={allTags} />
+        </SearchLayout>
       </div>
     </div>
   );
