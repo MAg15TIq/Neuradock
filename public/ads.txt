@@ -2,7 +2,7 @@
 # https://netpub.media
 # info@netpub.media
 
-# START ads.txt - neuradock.online - 04/06/2025 10:41 - netpub.media
+# START ads.txt - neuradock.online - 12/06/2025 07:08 - netpub.media
 netpub.media, 360754d2c82a7499ce91de1e61605ed3, DIRECT
 netmore.media, 360754d2c82a7499ce91de1e61605ed3, DIRECT
 152media.info, 152M10, RESELLER
@@ -271,6 +271,8 @@ media.net, 8CUZ1MK22, RESELLER
 media.net, 8cu4jtrf9, RESELLER
 mediafuse.com, 711, DIRECT
 mgid.com, 663441, DIRECT, d4c29acad76ce94f
+netpub.media, 360754d2c82a7499ce91de1e61605ed3, DIRECT
+netmore.media, 360754d2c82a7499ce91de1e61605ed3, DIRECT
 mgid.com, 833178, DIRECT, d4c29acad76ce94f
 mintegral.com, 10043, RESELLER, 0aeed750c80d6423
 minutemedia.com, 01gya4708ddm, RESELLER
@@ -539,6 +541,144 @@ zeta.com, 891, DIRECT
 zetaglobal.com, 108, RESELLER
 zetaglobal.net, 891, DIRECT
 zetaglobal.net, 891, RESELLER
+sharethrough.com, 1udopJ1S, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, 23830661, DIRECT, d53b998a7bd4ecd2
+sharethrough.com, 7144eb80, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, 98z2bw9f, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, OAW69Fon, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, Q9IzHdvp, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, QWxGEL6s, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, S6xYgb3B, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, a6a34444, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, c21oBkqP, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, cc26d15a, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, n98xdzel, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, r4ScMSsf, RESELLER, d53b998a7bd4ecd2
+sharethrough.com, uDlHlVKG, RESELLER, d53b998a7bd4ecd2
+smaato.com, 1100004890, RESELLER, 07bcf65f187117b4
+smaato.com, 1100044045, RESELLER, 07bcf65f187117b4
+smaato.com, 1100044650, RESELLER, 07bcf65f187117b4
+smaato.com, 1100045673, RESELLER, 07bcf65f187117b4
+smaato.com, 1100047713, RESELLER, 07bcf65f187117b4
+smaato.com, 1100048704, RESELLER, 07bcf65f187117b4
+smaato.com, 1100054606, RESELLER, 07bcf65f187117b4
+smaato.com, 1100055901, RESELLER, 07bcf65f187117b4
+smaato.com, 1100056344, RESELLER, 07bcf65f187117b4
+smartadserver.com, 1408, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 1743, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 1999, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 1999-OB, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 2441, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 2491, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 2640, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 2776, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 2951, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 3056, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 3374, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 3554, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 3820, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4111, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4125, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4144, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4253, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4288, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4342, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4483, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4537, RESELLER, 060d053dcf45cbf3
+smartadserver.com, 4926, RESELLER, 060d053dcf45cbf3
+smartyads.com, 260, RESELLER, fd2bde0ff2e62c5d
+smilewanted.com, 3834, RESELLER
+smilewanted.com, 4116, RESELLER
+sonobi.com, 3aed893727, RESELLER, d1a215d9eb5aee9e
+sonobi.com, 4c4fba1717, RESELLER, d1a215d9eb5aee9e
+sonobi.com, 7f5fa520f8, RESELLER, d1a215d9eb5aee9e
+sovrn.com, 249425, RESELLER, fafdf38b16bf6b2b
+sovrn.com, 267974, RESELLER, fafdf38b16bf6b2b
+sovrn.com, 278426, DIRECT, fafdf38b16bf6b2b
+sovrn.com, 357833, DIRECT, fafdf38b16bf6b2b
+sovrn.com, 374814, RESELLER, fafdf38b16bf6b2b
+sovrn.com, 380632, RESELLER, fafdf38b16bf6b2b
+spotim.market, sp_AYL2022, RESELLER, 077e5f709d15bdbb
+springserve.com, 1247, RESELLER, a24eb641fc82e93d
+start.io, 185522363, RESELLER
+stroeer.com, 23289, DIRECT
+sunmedia.tv, 12918514-294e-4e6e-8eae-c89a8fec20f5, DIRECT, 24794F6
+sunmedia.tv, 455be357-ad46-4f10-8872-701656980003, DIRECT, 24794F6
+sunmedia.tv, 852c0d87-cafc-4bba-a88c-f74cf18086b0, DIRECT, 24794F6
+supply.colossusssp.com, 601, DIRECT, 6c5b49d96ec1b458
+teads.tv, 29320, DIRECT, 15a9c44f6d26cbe1
+telaria.com, 2auap-45web, RESELLER, 1a4e959a1b50034a
+telaria.com, 2auap-ich32, RESELLER, 1a4e959a1b50034a
+telaria.com, 2auap-zihku, RESELLER, 1a4e959a1b50034a
+telaria.com, 51vtw, RESELLER, 1a4e959a1b50034a
+telaria.com, 9l6ha-6m433, RESELLER, 1a4e959a1b50034a
+telaria.com, cpu32-92xut, RESELLER, 1a4e959a1b50034a
+telaria.com, lkiu7-jqvg1, RESELLER, 1a4e959a1b50034a
+thebrave.io, 1234679, DIRECT, c25b2154543746ac
+themediagrid.com, 2LYG9A, RESELLER, 35d5010d7789b49d
+themediagrid.com, DNWTUA, DIRECT, 35d5010d7789b49d
+themediagrid.com, JTQKMP, RESELLER, 35d5010d7789b49d
+themediagrid.com, JZN34P, DIRECT, 35d5010d7789b49d
+themediagrid.com, P19GFJ, DIRECT, 35d5010d7789b49d
+themediagrid.com, RYIDPE, RESELLER, 35d5010d7789b49d
+themediagrid.com, VIY354, RESELLER, 35d5010d7789b49d
+themediagrid.com, uot45z, RESELLER, 35d5010d7789b49d
+tremorhub.com, 2auap-45web, RESELLER, 1a4e959a1b50034a
+tremorhub.com, 2auap-ich32, RESELLER, 1a4e959a1b50034a
+tremorhub.com, 2auap-zihku, RESELLER, 1a4e959a1b50034a
+tremorhub.com, 51vtw, RESELLER, 1a4e959a1b50034a
+tremorhub.com, 9l6ha-6m433, RESELLER, 1a4e959a1b50034a
+tremorhub.com, cpu32-92xut, RESELLER, 1a4e959a1b50034a
+tremorhub.com, lkiu7-jqvg1, RESELLER, 1a4e959a1b50034a
+triplelift.com, 11547, RESELLER, 6c33edb13117fd86
+triplelift.com, 12503, RESELLER, 6c33edb13117fd86
+triplelift.com, 12911, RESELLER, 6c33edb13117fd86
+triplelift.com, 12911-EB, RESELLER, 6c33edb13117fd86
+triplelift.com, 13482, RESELLER, 6c33edb13117fd86
+triplelift.com, 8446, DIRECT, 6c33edb13117fd86
+triplelift.com, 8683, RESELLER, 6c33edb13117fd86
+undertone.com, 4205, RESELLER, d954590d0cb265b9
+vi.ai, g-00739f9f52ed068c1a14409497320e378a, DIRECT
+vidazoo.com, 1773068026, RESELLER, b6ada874b4d7d0b2
+video.unrulymedia.com, 1014191143, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 1767448067723954599, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 2276989117, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 2444764291, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 2564526802, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 2736329702851206590, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 297618916, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 3139274702404301777, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 3486482593, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 367782854, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 533898005, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 5672421953199218469, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 827123801, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 851532539, RESELLER, 6f752381ad5ec0e5
+video.unrulymedia.com, 895733750, DIRECT, 6f752381ad5ec0e5
+videoffy.com, pub00076, RESELLER
+vidoomy.com, 2252369, RESELLER
+vidoomy.com, 4433873, RESELLER
+xad.com, 958, RESELLER, 81cbf0a75a5e0e9a
+xandr.com, 10736, RESELLER, f5ab79cb980f11d1
+xandr.com, 11924, RESELLER, f5ab79cb980f11d1
+xandr.com, 3153, RESELLER, f5ab79cb980f11d1
+xapads.com, 145030, RESELLER
+xapads.com, 196344, RESELLER
+yahoo.com, 49648, RESELLER, e1a5b5b6e3255540
+yahoo.com, 57289, RESELLER, e1a5b5b6e3255540
+yahoo.com, 59669, RESELLER, e1a5b5b6e3255540
+yieldlab.net, 227224, RESELLER
+yieldlab.net, 495507, DIRECT
+yieldlab.net, 5798882, RESELLER
+yieldlab.net, 6248161, RESELLER
+yieldlab.net, 6374282, RESELLER
+yieldmo.com, 2757543169808605705, RESELLER
+yieldmo.com, 3133660606033240149, RESELLER
+yieldmo.com, 3732919948490514514, RESELLER
+zeta.com, 891, DIRECT
+zetaglobal.com, 108, RESELLER
+zetaglobal.net, 891, DIRECT
+zetaglobal.net, 891, RESELLER
 OWNERDOMAIN=neuradock.online
 MANAGERDOMAIN=netpub.media
-# END ads.txt - neuradock.online - 04/06/2025 10:41 - netpub.media
+# END ads.txt - neuradock.online - 12/06/2025 07:08 - netpub.media
