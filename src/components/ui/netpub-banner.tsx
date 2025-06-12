@@ -43,10 +43,38 @@ export function NetpubBanner({
   notification = false
 }: NetpubBannerProps) {
   const [isClient, setIsClient] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string>('');
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+
+    // Debug: Check if Netpub script is loaded
+    const checkScript = () => {
+      const script = document.getElementById('831b33a650047ee11a992b11fdadd8f3');
+      const scriptExists = !!script;
+      setScriptLoaded(scriptExists);
+
+      // Debug information
+      const debug = [
+        `Script exists: ${scriptExists}`,
+        `Slot: ${slot}`,
+        `Desktop sizes: ${desktopSizes}`,
+        `Mobile sizes: ${mobileSizes}`,
+        `Window.netpub: ${typeof (window as any).netpub}`,
+        `Document ready: ${document.readyState}`
+      ].join(' | ');
+
+      setDebugInfo(debug);
+      console.log(`[NetpubBanner Slot ${slot}] ${debug}`);
+    };
+
+    // Check immediately and after a delay
+    checkScript();
+    const timer = setTimeout(checkScript, 2000);
+
+    return () => clearTimeout(timer);
+  }, [slot, desktopSizes, mobileSizes]);
 
   // Don't render during SSR to avoid hydration mismatches
   if (!isClient) {
@@ -64,7 +92,10 @@ export function NetpubBanner({
     'data-slot': slot.toString(),
     style: {
       display: 'block',
-      textAlign: 'center'
+      textAlign: 'center',
+      minHeight: '50px',
+      backgroundColor: process.env.NODE_ENV === 'development' ? '#f0f0f0' : 'transparent',
+      border: process.env.NODE_ENV === 'development' ? '1px dashed #ccc' : 'none'
     }
   };
 
@@ -84,6 +115,13 @@ export function NetpubBanner({
       data-slot={slot}
     >
       <ins {...insAttributes} />
+      {process.env.NODE_ENV === 'development' && (
+        <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-100 rounded">
+          <div>Slot {slot} Debug Info:</div>
+          <div className="font-mono text-xs">{debugInfo}</div>
+          <div>Script Loaded: {scriptLoaded ? '✅' : '❌'}</div>
+        </div>
+      )}
     </div>
   );
 }
