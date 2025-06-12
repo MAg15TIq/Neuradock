@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CATEGORIES } from "@/types/article";
 import { Search, Clock, User, Tag } from "lucide-react";
+import { ClientSimpleDateDisplay } from "@/components/ui/client-date-display";
 import type { ArticleMetadata } from "@/types/article";
 
 interface SearchClientProps {
@@ -166,7 +167,7 @@ export function SearchClient({ articles, tags }: SearchClientProps) {
                           <User className="h-4 w-4 mr-1" />
                           {article.author}
                         </div>
-                        <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
+                        <ClientSimpleDateDisplay date={article.publishedAt} />
                       </div>
                       {article.tags.length > 0 && (
                         <div className="mt-3 flex flex-wrap gap-1">

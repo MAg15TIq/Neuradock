@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Target, Users, Lightbulb, TrendingUp, BookOpen, GraduationCap, Briefcase, Heart, Award, Globe, Zap } from "lucide-react";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { FadeIn, StaggeredFadeIn } from "@/components/ui/animations";
+import { StaticPageAdLayout } from "@/components/layout/ad-layout-wrapper";
+import { BetweenContentAd } from "@/components/ui/universal-ad-system";
 
 export const metadata: Metadata = {
   title: "About Us - NeuraDock Knowledge Hub",
@@ -67,8 +69,7 @@ export default function AboutPage() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <StaticPageAdLayout>
         {/* Back Button */}
         <div className="mb-6">
           <Button variant="ghost" asChild>
@@ -145,14 +146,17 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
-                To democratize knowledge by providing high-quality, accessible content that empowers individuals 
-                and organizations to make informed decisions in an increasingly complex world. We believe that 
-                understanding finance, technology, education, and business fundamentals is essential for personal 
+                To democratize knowledge by providing high-quality, accessible content that empowers individuals
+                and organizations to make informed decisions in an increasingly complex world. We believe that
+                understanding finance, technology, education, and business fundamentals is essential for personal
                 and professional growth in the 21st century.
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Content Ad */}
+        <BetweenContentAd slot={2} />
 
         {/* What We Cover */}
         <div className="mb-16">
@@ -329,8 +333,7 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+      </StaticPageAdLayout>
     </ErrorBoundary>
   );
 }

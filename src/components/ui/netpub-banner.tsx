@@ -49,19 +49,27 @@ export function NetpubBanner({
   useEffect(() => {
     setIsClient(true);
 
-    // Debug: Check if Netpub script is loaded
+    // Enhanced script checking with better error detection
     const checkScript = () => {
       const script = document.getElementById('831b33a650047ee11a992b11fdadd8f3');
       const scriptExists = !!script;
-      setScriptLoaded(scriptExists);
+      const netpubLoaded = !!(window as any).netpubLoaded;
+      const netpubFailed = !!(window as any).netpubLoadFailed;
+      const netpubObject = typeof (window as any).netpub !== 'undefined';
+      const retryCount = (window as any).netpubRetryCount || 0;
 
-      // Debug information
+      setScriptLoaded(scriptExists && netpubLoaded && netpubObject);
+
+      // Enhanced debug information
       const debug = [
         `Script exists: ${scriptExists}`,
+        `NetPub loaded: ${netpubLoaded}`,
+        `NetPub failed: ${netpubFailed}`,
+        `NetPub object: ${netpubObject}`,
+        `Retry count: ${retryCount}`,
         `Slot: ${slot}`,
         `Desktop sizes: ${desktopSizes}`,
         `Mobile sizes: ${mobileSizes}`,
-        `Window.netpub: ${typeof (window as any).netpub}`,
         `Document ready: ${document.readyState}`
       ].join(' | ');
 
@@ -69,11 +77,35 @@ export function NetpubBanner({
       console.log(`[NetpubBanner Slot ${slot}] ${debug}`);
     };
 
-    // Check immediately and after a delay
+    // Check immediately and after delays
     checkScript();
-    const timer = setTimeout(checkScript, 2000);
+    const timer1 = setTimeout(checkScript, 1000);
+    const timer2 = setTimeout(checkScript, 3000);
+    const timer3 = setTimeout(checkScript, 5000);
 
-    return () => clearTimeout(timer);
+    // Listen for NetPub events
+    const handleNetpubLoaded = () => {
+      console.log(`[NetpubBanner Slot ${slot}] NetPub loaded event received`);
+      setTimeout(checkScript, 500);
+    };
+
+    const handleNetpubFailed = () => {
+      console.log(`[NetpubBanner Slot ${slot}] NetPub failed event received`);
+      setTimeout(checkScript, 500);
+    };
+
+    window.addEventListener('netpubLoaded', handleNetpubLoaded);
+    window.addEventListener('netpubLoadFailed', handleNetpubFailed);
+    window.addEventListener('netpubObjectMissing', handleNetpubFailed);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      window.removeEventListener('netpubLoaded', handleNetpubLoaded);
+      window.removeEventListener('netpubLoadFailed', handleNetpubFailed);
+      window.removeEventListener('netpubObjectMissing', handleNetpubFailed);
+    };
   }, [slot, desktopSizes, mobileSizes]);
 
   // Don't render during SSR to avoid hydration mismatches
@@ -83,6 +115,9 @@ export function NetpubBanner({
 
   const bannerClass = `adv-831b33a650047ee11a992b11fdadd8f3`;
   const bannerId = containerId || `netpub-banner-slot-${slot}`;
+
+  // Check if we should show fallback content
+  const showFallback = !scriptLoaded && (window as any).netpubLoadFailed;
 
   // Build the ins element attributes
   const insAttributes: Record<string, string | number | React.CSSProperties> = {
@@ -113,13 +148,47 @@ export function NetpubBanner({
       id={bannerId}
       className={`netpub-banner-container ${className}`}
       data-slot={slot}
+      data-desktop-sizes={desktopSizes}
+      data-mobile-sizes={mobileSizes}
     >
-      <ins {...insAttributes} />
+      {showFallback ? (
+        // Fallback content when ads fail to load
+        <div
+          className="ad-fallback-content"
+          style={{
+            minHeight: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #e9ecef',
+            borderRadius: '4px',
+            color: '#6c757d',
+            fontSize: '14px'
+          }}
+        >
+          {process.env.NODE_ENV === 'development' ? (
+            <div className="text-center">
+              <div>Ad Slot {slot}</div>
+              <div className="text-xs mt-1">Script failed to load</div>
+            </div>
+          ) : (
+            <div>Advertisement</div>
+          )}
+        </div>
+      ) : (
+        <ins {...insAttributes} />
+      )}
+
       {process.env.NODE_ENV === 'development' && (
         <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-100 rounded">
           <div>Slot {slot} Debug Info:</div>
-          <div className="font-mono text-xs">{debugInfo}</div>
+          <div>Desktop: {desktopSizes}</div>
+          <div>Mobile: {mobileSizes}</div>
           <div>Script Loaded: {scriptLoaded ? '✅' : '❌'}</div>
+          <div>Failed: {(window as any).netpubLoadFailed ? '✅' : '❌'}</div>
+          <div>Retry: {(window as any).netpubRetryCount || 0}</div>
+          <div className="font-mono text-xs break-all mt-1">{debugInfo}</div>
         </div>
       )}
     </div>

@@ -8,7 +8,9 @@ import { ReadingProgress, ScrollToTop, TableOfContents, EstimatedReadTime } from
 import { SocialShare } from "@/components/ui/social-share";
 import { FadeIn } from "@/components/ui/animations";
 import { OptimizedImage } from "@/components/ui/optimized-image";
-import { ArticleLayout } from "@/components/layout/sidebar-layout";
+import { ArticleAdLayout } from "@/components/layout/ad-layout-wrapper";
+import { ArticleTopAd, ArticleBottomAd, BetweenContentAd } from "@/components/ui/universal-ad-system";
+import { ClientDateDisplay, ClientSimpleDateDisplay } from "@/components/ui/client-date-display";
 import { ArrowLeft, Clock, User, Calendar, Tag } from "lucide-react";
 
 interface ArticlePageProps {
@@ -49,8 +51,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <>
       <ReadingProgress color="primary" />
-      <div className="min-h-screen bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <ArticleAdLayout
+        sidebarContent={
+          headings.length > 0 ? (
+            <Card className="p-4">
+              <TableOfContents headings={headings} />
+            </Card>
+          ) : undefined
+        }
+      >
         {/* Breadcrumb Navigation */}
         <div className="mb-6">
           <Breadcrumb
@@ -98,11 +107,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </div>
               <div className="flex items-center">
                 <Calendar className="h-4 w-4 mr-2" />
-                <span>{new Date(article.publishedAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}</span>
+                <ClientDateDisplay
+                  date={article.publishedAt}
+                  options={{
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  }}
+                />
               </div>
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-2" />
@@ -139,6 +151,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </header>
         </FadeIn>
 
+        {/* Article Top Ad */}
+        <ArticleTopAd slot={2} />
+
         {/* Hero Image */}
         {article.heroImage && (
           <FadeIn delay={100}>
@@ -164,34 +179,28 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           variant="floating"
         />
 
-        {/* Article Content with Sidebar Layout */}
-        <ArticleLayout
-          tableOfContents={headings.length > 0 ? (
+        {/* Table of Contents - Mobile */}
+        {headings.length > 0 && (
+          <div className="lg:hidden mb-8">
             <Card className="p-4">
               <TableOfContents headings={headings} />
             </Card>
-          ) : undefined}
-          showAds={true}
-        >
-          {/* Table of Contents - Mobile */}
-          {headings.length > 0 && (
-            <div className="lg:hidden mb-8">
-              <Card className="p-4">
-                <TableOfContents headings={headings} />
-              </Card>
-            </div>
-          )}
+          </div>
+        )}
 
-          <FadeIn delay={200}>
-            <article className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-li:text-gray-700">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: article.content
-                }}
-              />
-            </article>
-          </FadeIn>
-        </ArticleLayout>
+        {/* Article Content */}
+        <FadeIn delay={200}>
+          <article className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-li:text-gray-700">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: article.content
+              }}
+            />
+          </article>
+        </FadeIn>
+
+        {/* Between Content Ad */}
+        <BetweenContentAd slot={3} />
 
         {/* Tags Section */}
         {article.tags.length > 0 && (
@@ -242,7 +251,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                           <User className="h-4 w-4 mr-1" />
                           {relatedArticle.author}
                         </div>
-                        <span>{new Date(relatedArticle.publishedAt).toLocaleDateString()}</span>
+                        <ClientSimpleDateDisplay date={relatedArticle.publishedAt} />
                       </div>
                     </CardContent>
                   </Card>
@@ -251,6 +260,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </div>
         )}
+
+        {/* Article Bottom Ad */}
+        <ArticleBottomAd slot={4} />
 
         {/* Article Footer */}
         <footer className="mt-12 pt-8 border-t border-gray-200">
@@ -264,8 +276,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </Link>
           </div>
         </footer>
-        </div>
-      </div>
+      </ArticleAdLayout>
       <ScrollToTop />
     </>
   );

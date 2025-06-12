@@ -5,9 +5,11 @@ import { ArticleCard } from "@/components/ui/article-card";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { FadeIn, StaggeredFadeIn } from "@/components/ui/animations";
 import { ContentDiscovery } from "@/components/ui/content-discovery";
-import { SidebarLayout } from "@/components/layout/sidebar-layout";
+import { HomepageAdLayout } from "@/components/layout/ad-layout-wrapper";
+import { BetweenContentAd, ContentAd } from "@/components/ui/universal-ad-system";
 import { getFeaturedArticles } from "@/lib/articles";
 import { CATEGORIES } from "@/types/article";
+import { formatDateForDisplay } from "@/lib/date-utils";
 import { ArrowRight, BookOpen, TrendingUp, GraduationCap, Briefcase, Sparkles, Zap } from "lucide-react";
 
 export default function Home() {
@@ -36,10 +38,31 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <HomepageAdLayout
+      sidebarContent={
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Quick Navigation</CardTitle>
+          </CardHeader>
+          <CardDescription className="px-6 pb-6">
+            <div className="space-y-2">
+              {Object.entries(CATEGORIES).map(([key, category]) => (
+                <Link
+                  key={key}
+                  href={`/${key}`}
+                  className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          </CardDescription>
+        </Card>
+      }
+    >
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-20 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-20 transition-colors rounded-lg mb-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <FadeIn>
               <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
@@ -76,103 +99,99 @@ export default function Home() {
       </section>
 
       {/* Categories Section */}
-      <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Explore Our Categories</h2>
-            <p className="text-lg text-muted-foreground">
-              Dive deep into specialized knowledge areas curated by industry experts
-            </p>
-          </div>
-
-          <StaggeredFadeIn
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-            staggerDelay={150}
-          >
-            {Object.entries(CATEGORIES).map(([key, category]) => {
-              const Icon = categoryIcons[key as keyof typeof categoryIcons];
-              return (
-                <Link key={key} href={`/${key}`}>
-                  <Card hover interactive className="h-full group">
-                    <CardHeader className="text-center">
-                      <div className="mx-auto w-12 h-12 bg-gradient-to-br from-primary to-purple-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <Icon className="h-6 w-6 text-white" />
-                      </div>
-                      <CardTitle className="text-xl">{category.name}</CardTitle>
-                      <CardDescription className="text-center">
-                        {category.description}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              );
-            })}
-          </StaggeredFadeIn>
+      <section className="py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-foreground mb-4">Explore Our Categories</h2>
+          <p className="text-lg text-muted-foreground">
+            Dive deep into specialized knowledge areas curated by industry experts
+          </p>
         </div>
+
+        <StaggeredFadeIn
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          staggerDelay={150}
+        >
+          {Object.entries(CATEGORIES).map(([key, category]) => {
+            const Icon = categoryIcons[key as keyof typeof categoryIcons];
+            return (
+              <Link key={key} href={`/${key}`}>
+                <Card hover interactive className="h-full group">
+                  <CardHeader className="text-center">
+                    <div className="mx-auto w-12 h-12 bg-gradient-to-br from-primary to-purple-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <CardTitle className="text-xl">{category.name}</CardTitle>
+                    <CardDescription className="text-center">
+                      {category.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
+            );
+          })}
+        </StaggeredFadeIn>
       </section>
+
+      {/* Content Ad */}
+      <BetweenContentAd slot={2} />
 
       {/* Featured Articles Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Featured Articles</h2>
-            <p className="text-lg text-muted-foreground">
-              Latest insights and expert analysis from our knowledge base
-            </p>
-          </div>
+      <section className="py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-foreground mb-4">Featured Articles</h2>
+          <p className="text-lg text-muted-foreground">
+            Latest insights and expert analysis from our knowledge base
+          </p>
+        </div>
 
-          <SidebarLayout showAds={true}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-              {featuredArticles.map((article) => (
-                <ArticleCard
-                  key={article.slug}
-                  title={article.title}
-                  description={article.description}
-                  slug={article.slug}
-                  category={article.category}
-                  date={new Date(article.publishedAt).toLocaleDateString()}
-                  readTime={`${article.readTime} min`}
-                  author={article.author}
-                  image={article.heroImage}
-                />
-              ))}
-            </div>
-          </SidebarLayout>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {featuredArticles.map((article) => (
+            <ArticleCard
+              key={article.slug}
+              title={article.title}
+              description={article.description}
+              slug={article.slug}
+              category={article.category}
+              date={formatDateForDisplay(article.publishedAt)}
+              readTime={`${article.readTime} min`}
+              author={article.author}
+              image={article.heroImage}
+            />
+          ))}
         </div>
       </section>
 
-      {/* Content Discovery Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <FadeIn>
-              <h2 className="text-3xl font-bold text-foreground mb-4 flex items-center justify-center space-x-2">
-                <Sparkles className="h-8 w-8 text-primary" />
-                <span>Discover More</span>
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                Explore trending topics and discover new content tailored to your interests
-              </p>
-            </FadeIn>
-          </div>
+      {/* Content Ad */}
+      <ContentAd slot={3} />
 
-          <div className="max-w-4xl mx-auto">
-            <ContentDiscovery
-              trendingTopics={trendingTopics}
-              popularTags={popularTags}
-            />
-          </div>
+      {/* Content Discovery Section */}
+      <section className="py-16">
+        <div className="text-center mb-12">
+          <FadeIn>
+            <h2 className="text-3xl font-bold text-foreground mb-4 flex items-center justify-center space-x-2">
+              <Sparkles className="h-8 w-8 text-primary" />
+              <span>Discover More</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Explore trending topics and discover new content tailored to your interests
+            </p>
+          </FadeIn>
+        </div>
+
+        <div className="max-w-4xl mx-auto">
+          <ContentDiscovery
+            trendingTopics={trendingTopics}
+            popularTags={popularTags}
+          />
         </div>
       </section>
 
       {/* Newsletter Signup Section */}
-      <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto">
-            <NewsletterSignup />
-          </div>
+      <section className="py-16">
+        <div className="max-w-2xl mx-auto">
+          <NewsletterSignup />
         </div>
       </section>
-    </div>
+    </HomepageAdLayout>
   );
 }

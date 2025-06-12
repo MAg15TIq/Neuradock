@@ -12,6 +12,7 @@ import { PullToRefresh, SwipeNavigation, PinchToZoomImage } from "@/components/u
 import { AdvancedSearch } from "@/components/ui/advanced-search";
 import { ImageGallery } from "@/components/ui/image-gallery";
 import { ArrowLeft, Image as ImageIcon, Zap, Accessibility, Smartphone, Palette, Search, RefreshCw, Eye } from "lucide-react";
+import { ClientTimeDisplay } from "@/components/ui/client-date-display";
 
 // Mock data for infinite scroll demo
 interface MockArticle {
@@ -361,7 +362,7 @@ export default function ShowcasePage() {
                             </div>
                           ) : (
                             <div className="space-y-2">
-                              <p>Content refreshed at: {new Date().toLocaleTimeString()}</p>
+                              <p>Content refreshed at: <ClientTimeDisplay /></p>
                               <p>This content updates when you pull to refresh.</p>
                               <p>Try it on mobile for the best experience!</p>
                             </div>
