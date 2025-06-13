@@ -5,18 +5,14 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  NetpubBanner,
+import {
   NetpubMediumRectangle,
-  NetpubLeaderboard,
-  NetpubLargeRectangle,
-  NetpubHalfPage,
   NetpubIABBanner,
   NetpubFixedLeaderboard,
   NetpubNotificationBanner,
   NetpubSlot6Banner
 } from '@/components/ui/netpub-banner';
-import { AdBanner, SidebarAdBanner, ContentAdBanner, useAdBanner } from '@/components/ui/ad-banner';
+import { AdBanner, useAdBanner } from '@/components/ui/ad-banner';
 import { ArrowLeft, CheckCircle, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 
 interface ScriptStatus {
@@ -31,7 +27,7 @@ export default function AdDebugPage() {
   const [netpubGlobal, setNetpubGlobal] = useState<any>(null);
   const [adElements, setAdElements] = useState<Element[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
-  const { adsBlocked, adsLoaded, shouldShowAds } = useAdBanner();
+  const { adsBlocked } = useAdBanner();
 
   const checkScripts = () => {
     const scripts = [

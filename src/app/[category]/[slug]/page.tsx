@@ -151,7 +151,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </header>
         </FadeIn>
 
-        {/* Article Top Ad */}
+        {/* Article Top Ad - Slot 2 */}
         <ArticleTopAd slot={2} />
 
         {/* Hero Image */}
@@ -199,8 +199,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </article>
         </FadeIn>
 
-        {/* Between Content Ad */}
+        {/* Between Content Ad - Slot 3 */}
         <BetweenContentAd slot={3} />
+
+        {/* Additional Content Ad - Slot 5 */}
+        <BetweenContentAd slot={5} />
 
         {/* Tags Section */}
         {article.tags.length > 0 && (
@@ -261,7 +264,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         )}
 
-        {/* Article Bottom Ad */}
+        {/* Article Bottom Ad - Slot 4 */}
         <ArticleBottomAd slot={4} />
 
         {/* Article Footer */}

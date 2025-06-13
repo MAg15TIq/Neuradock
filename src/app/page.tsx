@@ -61,7 +61,7 @@ export default function Home() {
       }
     >
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-20 transition-colors rounded-lg mb-8">
+      <section className="hero-section bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-20 transition-colors rounded-lg mb-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <FadeIn>
@@ -132,7 +132,7 @@ export default function Home() {
         </StaggeredFadeIn>
       </section>
 
-      {/* Content Ad */}
+      {/* Content Ad - Slot 2 */}
       <BetweenContentAd slot={2} />
 
       {/* Featured Articles Section */}
@@ -161,8 +161,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Content Ad */}
+      {/* Content Ad - Slot 3 */}
       <ContentAd slot={3} />
+
+      {/* Additional Content Ad - Slot 5 */}
+      <BetweenContentAd slot={5} />
 
       {/* Content Discovery Section */}
       <section className="py-16">

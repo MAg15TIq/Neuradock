@@ -432,6 +432,112 @@
     @apply text-sm text-foreground leading-relaxed;
   }
 
+  /* NetPub Ad System Styling */
+  .netpub-banner-container {
+    @apply relative overflow-hidden;
+    /* Ensure ads don't interfere with layout */
+    z-index: 1;
+  }
+
+  .netpub-banner-container ins {
+    @apply block;
+    /* Prevent ads from overlaying content */
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  /* Hide empty ad containers */
+  .netpub-banner-container ins:empty {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide containers with no meaningful content */
+  .netpub-banner-container ins:not(:has(iframe)):not(:has(script)):not(:has(img)):not(:has(div)) {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+  }
+
+  /* Ad Layout Containers */
+  .header-ad-container {
+    @apply relative;
+    /* Ensure header ads stay in their container */
+    z-index: 10;
+  }
+
+  .sidebar-ad-container {
+    @apply relative;
+    /* Sidebar ads should not overflow */
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .footer-ad-container {
+    @apply relative;
+    z-index: 10;
+  }
+
+  .mobile-ad-top,
+  .mobile-ad-bottom {
+    @apply relative;
+    z-index: 10;
+  }
+
+  /* Universal Ad Container */
+  .universal-ad-container {
+    @apply relative;
+    /* Only show minimum height when content is present */
+    min-height: 0;
+  }
+
+  /* Only add minimum height when ads are actually loading/present */
+  .universal-ad-container:has(.netpub-banner-container) {
+    min-height: 50px;
+  }
+
+  /* Hide universal containers when they have no content */
+  .universal-ad-container:empty {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ad Fallback Content */
+  .ad-fallback-content {
+    @apply flex items-center justify-center;
+    @apply bg-muted/30 border border-border rounded-lg;
+    @apply text-muted-foreground text-sm;
+    min-height: 50px;
+  }
+
+  /* Hero Section Protection */
+  .hero-section {
+    @apply relative;
+    /* Ensure hero content stays above ads */
+    z-index: 20;
+  }
+
+  /* Banner Placement Wrapper */
+  .banner-placement {
+    @apply relative;
+    /* Ensure proper spacing and positioning */
+    clear: both;
+  }
+
+  /* Responsive Ad Adjustments */
+  @media (max-width: 768px) {
+    .netpub-banner-container {
+      /* Mobile-specific ad adjustments */
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+  }
+
   .comment-actions {
     @apply flex items-center space-x-4 mt-3 pt-3 border-t border-border;
   }
