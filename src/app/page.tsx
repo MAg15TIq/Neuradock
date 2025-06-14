@@ -10,7 +10,7 @@ import { BetweenContentAd, ContentAd } from "@/components/ui/universal-ad-system
 import { getFeaturedArticles } from "@/lib/articles";
 import { CATEGORIES } from "@/types/article";
 import { formatDateForDisplay } from "@/lib/date-utils";
-import { ArrowRight, BookOpen, TrendingUp, GraduationCap, Briefcase, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, BookOpen, TrendingUp, GraduationCap, Briefcase, Sparkles } from "lucide-react";
 
 export default function Home() {
   const featuredArticles = getFeaturedArticles(6);
@@ -38,28 +38,7 @@ export default function Home() {
   ];
 
   return (
-    <HomepageAdLayout
-      sidebarContent={
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Quick Navigation</CardTitle>
-          </CardHeader>
-          <CardDescription className="px-6 pb-6">
-            <div className="space-y-2">
-              {Object.entries(CATEGORIES).map(([key, category]) => (
-                <Link
-                  key={key}
-                  href={`/${key}`}
-                  className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {category.name}
-                </Link>
-              ))}
-            </div>
-          </CardDescription>
-        </Card>
-      }
-    >
+    <HomepageAdLayout>
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-20 transition-colors rounded-lg mb-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -79,17 +58,11 @@ export default function Home() {
               </p>
             </FadeIn>
             <FadeIn delay={400}>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex justify-center">
                 <Button size="xl" className="text-lg px-8 btn-hover-lift" asChild>
                   <Link href="/technology">
                     Explore Articles
                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button variant="outline" size="xl" className="text-lg px-8 btn-hover-lift" asChild>
-                  <Link href="/showcase">
-                    <Zap className="mr-2 h-5 w-5" />
-                    View Showcase
                   </Link>
                 </Button>
               </div>

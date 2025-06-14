@@ -49,8 +49,14 @@ export function ScriptHandler({
         src={src}
         strategy={strategy}
         id={id}
-        onLoad={onLoad}
-        onError={onError}
+        onLoad={() => {
+          console.log(`[ScriptHandler] External script loaded: ${src}`);
+          onLoad?.();
+        }}
+        onError={(error) => {
+          console.error(`[ScriptHandler] External script error: ${src}`, error);
+          onError?.(error);
+        }}
         {...props}
       />
     );
@@ -76,8 +82,14 @@ export function ScriptHandler({
         <Script
           id={id || `inline-script-${Math.random().toString(36).substr(2, 9)}`}
           strategy={strategy}
-          onLoad={onLoad}
-          onError={onError}
+          onLoad={() => {
+            console.log(`[ScriptHandler] Inline script loaded: ${id || 'unnamed'}`);
+            onLoad?.();
+          }}
+          onError={(error) => {
+            console.error(`[ScriptHandler] Inline script error: ${id || 'unnamed'}`, error);
+            onError?.(error);
+          }}
           {...props}
         >
           {children}

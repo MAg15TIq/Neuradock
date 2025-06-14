@@ -31,6 +31,7 @@ export default function NetpubDiagnosticsPage() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
+  const [debugInfo, setDebugInfo] = useState<any>(null);
 
   const runDiagnostics = async () => {
     setIsLoading(true);
@@ -38,16 +39,25 @@ export default function NetpubDiagnosticsPage() {
     const warnings: string[] = [];
 
     try {
-      // Check NetPub script
-      const script = document.getElementById('831b33a650047ee11a992b11fdadd8f3');
-      const scriptLoaded = !!script;
+      // Check NetPub script - look for robust loader scripts
+      const robustScript = document.getElementById('netpub-robust-loader');
+      const netpubScripts = document.querySelectorAll('script[id*="netpub-robust"]');
+      const scriptLoaded = !!robustScript || netpubScripts.length > 0 || !!(window as any).netpubScriptLoaded;
 
-      // Check NetPub object
-      const netpubObject = !!(window as any).netpub || !!(window as any).netpubLoaded;
+      // Check NetPub object - comprehensive check
+      const netpubObject = !!(window as any).netpub ||
+                          !!(window as any).NetPub ||
+                          !!(window as any).__npEngineRun_831b33a650047ee11a992b11fdadd8f3 ||
+                          !!(window as any).netpubScriptLoaded;
 
       // Check for script loading failure
       if ((window as any).netpubLoadFailed) {
         errors.push('NetPub script failed to load from all attempted URLs');
+      }
+
+      // Check if script is currently loading
+      if ((window as any).netpubScriptLoading) {
+        warnings.push('NetPub script is currently loading...');
       }
 
       // Count ad containers
@@ -71,22 +81,47 @@ export default function NetpubDiagnosticsPage() {
         warnings.push('Could not verify ads.txt file accessibility');
       }
 
-      // Additional checks
-      if (!scriptLoaded) {
-        errors.push('NetPub script not found in DOM');
+      // Enhanced diagnostic checks
+      if (!scriptLoaded && !robustScript) {
+        errors.push('NetPub robust loader script not found in DOM');
       }
 
       if (!netpubObject && scriptLoaded) {
-        warnings.push('NetPub script loaded but object not available');
+        warnings.push('NetPub script loaded but object not available - may still be initializing');
       }
 
       if (adContainers === 0) {
-        warnings.push('No ad containers found on page');
+        warnings.push('No ad containers found on this page');
       }
 
       if (!verificationMeta) {
-        errors.push('Verification meta tag missing');
+        errors.push('NetPub verification meta tag missing from page head');
       }
+
+      // Check if script is currently loading
+      if ((window as any).netpubScriptLoading) {
+        warnings.push('NetPub script is currently loading - please wait...');
+      }
+
+      // Provide helpful information
+      if (!scriptLoaded && !netpubObject) {
+        warnings.push('NetPub system appears to be initializing. This is normal on first page load.');
+      }
+
+      // Debug information
+      const debugInfo = {
+        robustScriptFound: !!robustScript,
+        netpubScriptsCount: netpubScripts.length,
+        globalFlags: {
+          netpubScriptLoaded: (window as any).netpubScriptLoaded,
+          netpubScriptLoading: (window as any).netpubScriptLoading,
+          netpubLoadFailed: (window as any).netpubLoadFailed,
+          retryCount: (window as any).netpubRetryCount
+        }
+      };
+
+      console.log('[NetPub Diagnostics] Debug Info:', debugInfo);
+      setDebugInfo(debugInfo);
 
       setStatus({
         scriptLoaded,
@@ -106,6 +141,18 @@ export default function NetpubDiagnosticsPage() {
 
     setIsLoading(false);
     setLastChecked(new Date());
+  };
+
+  const retryNetpubLoad = () => {
+    if (typeof (window as any).retryNetpubRobust === 'function') {
+      (window as any).retryNetpubRobust();
+      setTimeout(runDiagnostics, 2000);
+    } else if (typeof (window as any).retryNetpubLoad === 'function') {
+      (window as any).retryNetpubLoad();
+      setTimeout(runDiagnostics, 2000);
+    } else {
+      alert('No retry function available. Please refresh the page.');
+    }
   };
 
   useEffect(() => {
@@ -154,10 +201,15 @@ export default function NetpubDiagnosticsPage() {
             <h1 className="text-3xl font-bold text-foreground mb-2">NetPub Diagnostics</h1>
             <p className="text-muted-foreground">Real-time monitoring of NetPub ad system status</p>
           </div>
-          <Button onClick={runDiagnostics} disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-            {isLoading ? 'Checking...' : 'Refresh'}
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={runDiagnostics} disabled={isLoading}>
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              {isLoading ? 'Checking...' : 'Refresh'}
+            </Button>
+            <Button onClick={retryNetpubLoad} variant="outline" disabled={isLoading}>
+              🔄 Retry NetPub
+            </Button>
+          </div>
         </div>
         
         {lastChecked && (
@@ -258,6 +310,26 @@ export default function NetpubDiagnosticsPage() {
                 </li>
               ))}
             </ul>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Debug Information */}
+      {debugInfo && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Debug Information</CardTitle>
+            <CardDescription>Technical details for troubleshooting</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 text-sm">
+              <div><strong>Robust Script Found:</strong> {debugInfo.robustScriptFound ? '✅ Yes' : '❌ No'}</div>
+              <div><strong>NetPub Scripts Count:</strong> {debugInfo.netpubScriptsCount}</div>
+              <div><strong>Script Loaded Flag:</strong> {debugInfo.globalFlags.netpubScriptLoaded ? '✅ True' : '❌ False'}</div>
+              <div><strong>Script Loading Flag:</strong> {debugInfo.globalFlags.netpubScriptLoading ? '⏳ True' : '❌ False'}</div>
+              <div><strong>Load Failed Flag:</strong> {debugInfo.globalFlags.netpubLoadFailed ? '❌ True' : '✅ False'}</div>
+              <div><strong>Retry Count:</strong> {debugInfo.globalFlags.retryCount || 0}</div>
+            </div>
           </CardContent>
         </Card>
       )}
