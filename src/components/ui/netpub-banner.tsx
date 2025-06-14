@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { shouldShowAds, shouldShowEmptyContainers, shouldShowDebugInfo, getMaxRetries } from '@/lib/ad-config';
 
 export interface NetpubBannerProps {
   /** Banner slot number (1, 2, 3, etc.) */
@@ -45,11 +46,13 @@ export function NetpubBanner({
   const [isClient, setIsClient] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string>('');
+  const [hasAdContent, setHasAdContent] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
 
-    // Enhanced script checking with better error detection
+    // Enhanced script checking with ad content detection
     const checkScript = () => {
       const script = document.getElementById('831b33a650047ee11a992b11fdadd8f3');
       const scriptExists = !!script;
@@ -58,7 +61,32 @@ export function NetpubBanner({
       const netpubObject = typeof (window as any).netpub !== 'undefined';
       const retryCount = (window as any).netpubRetryCount || 0;
 
-      setScriptLoaded(scriptExists && netpubLoaded && netpubObject);
+      const isScriptReady = scriptExists && netpubLoaded && netpubObject;
+      setScriptLoaded(isScriptReady);
+
+      // Check if ad content is actually loaded
+      const bannerId = containerId || `netpub-banner-slot-${slot}`;
+      const adContainer = document.getElementById(bannerId);
+      const adElement = adContainer?.querySelector('.adv-831b33a650047ee11a992b11fdadd8f3');
+
+      let hasContent = false;
+      if (adElement) {
+        // Check if ad has actual content (not just the empty ins tag)
+        const hasChildren = adElement.children.length > 0;
+        const hasInnerHTML = adElement.innerHTML.trim().length > 0;
+        const hasIframe = adElement.querySelector('iframe') !== null;
+        const hasScript = adElement.querySelector('script') !== null;
+
+        hasContent = hasChildren || hasInnerHTML || hasIframe || hasScript;
+      }
+
+      setHasAdContent(hasContent);
+
+      // Only render if script is ready AND we have content, OR if we're still loading
+      const maxRetries = getMaxRetries();
+      const stillLoading = !netpubFailed && retryCount < maxRetries;
+      const shouldShow = (isScriptReady && hasContent) || (stillLoading && shouldShowEmptyContainers());
+      setShouldRender(shouldShow);
 
       // Enhanced debug information
       const debug = [
@@ -67,10 +95,9 @@ export function NetpubBanner({
         `NetPub failed: ${netpubFailed}`,
         `NetPub object: ${netpubObject}`,
         `Retry count: ${retryCount}`,
-        `Slot: ${slot}`,
-        `Desktop sizes: ${desktopSizes}`,
-        `Mobile sizes: ${mobileSizes}`,
-        `Document ready: ${document.readyState}`
+        `Has content: ${hasContent}`,
+        `Should render: ${shouldShow}`,
+        `Slot: ${slot}`
       ].join(' | ');
 
       setDebugInfo(debug);
@@ -82,6 +109,7 @@ export function NetpubBanner({
     const timer1 = setTimeout(checkScript, 1000);
     const timer2 = setTimeout(checkScript, 3000);
     const timer3 = setTimeout(checkScript, 5000);
+    const timer4 = setTimeout(checkScript, 10000); // Additional check for slower loading ads
 
     // Listen for NetPub events
     const handleNetpubLoaded = () => {
@@ -102,6 +130,7 @@ export function NetpubBanner({
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
+      clearTimeout(timer4);
       window.removeEventListener('netpubLoaded', handleNetpubLoaded);
       window.removeEventListener('netpubLoadFailed', handleNetpubFailed);
       window.removeEventListener('netpubObjectMissing', handleNetpubFailed);
@@ -113,11 +142,21 @@ export function NetpubBanner({
     return null;
   }
 
+  // Don't render if ads are disabled globally
+  if (!shouldShowAds()) {
+    return null;
+  }
+
+  // Don't render if we shouldn't show the container
+  if (!shouldRender) {
+    return null;
+  }
+
   const bannerClass = `adv-831b33a650047ee11a992b11fdadd8f3`;
   const bannerId = containerId || `netpub-banner-slot-${slot}`;
 
-  // Check if we should show fallback content
-  const showFallback = !scriptLoaded && (window as any).netpubLoadFailed;
+  // Check if we should show fallback content (only in development when enabled)
+  const showFallback = shouldShowEmptyContainers() && !scriptLoaded && (window as any).netpubLoadFailed;
 
   // Build the ins element attributes
   const insAttributes: Record<string, string | number | React.CSSProperties> = {
@@ -128,9 +167,12 @@ export function NetpubBanner({
     style: {
       display: 'block',
       textAlign: 'center',
-      minHeight: '50px',
-      backgroundColor: process.env.NODE_ENV === 'development' ? '#f0f0f0' : 'transparent',
-      border: process.env.NODE_ENV === 'development' ? '1px dashed #ccc' : 'none'
+      minHeight: hasAdContent ? 'auto' : '50px',
+      maxWidth: '100%',
+      backgroundColor: 'transparent', // Always transparent in production
+      border: 'none', // No borders in production
+      position: 'relative',
+      zIndex: 1
     }
   };
 
@@ -180,12 +222,14 @@ export function NetpubBanner({
         <ins {...insAttributes} />
       )}
 
-      {process.env.NODE_ENV === 'development' && (
+      {shouldShowDebugInfo() && (
         <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-100 rounded">
           <div>Slot {slot} Debug Info:</div>
           <div>Desktop: {desktopSizes}</div>
           <div>Mobile: {mobileSizes}</div>
           <div>Script Loaded: {scriptLoaded ? '✅' : '❌'}</div>
+          <div>Has Content: {hasAdContent ? '✅' : '❌'}</div>
+          <div>Should Render: {shouldRender ? '✅' : '❌'}</div>
           <div>Failed: {(window as any).netpubLoadFailed ? '✅' : '❌'}</div>
           <div>Retry: {(window as any).netpubRetryCount || 0}</div>
           <div className="font-mono text-xs break-all mt-1">{debugInfo}</div>

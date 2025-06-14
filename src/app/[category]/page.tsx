@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getArticlesByCategory } from "@/lib/articles";
 import { CATEGORIES } from "@/types/article";
 import { formatDateForDisplay } from "@/lib/date-utils";
-import { ArrowLeft, BookOpen, TrendingUp } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -102,8 +102,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             ))}
           </div>
 
-          {/* Content Ad between articles */}
+          {/* Content Ad between articles - Slot 2 */}
           {articles.length > 4 && <BetweenContentAd slot={2} />}
+
+          {/* Additional Content Ad - Slot 6 */}
+          {articles.length > 6 && <BetweenContentAd slot={6} />}
 
           {articles.length > 4 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

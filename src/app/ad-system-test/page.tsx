@@ -4,33 +4,23 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { 
-  UniversalAd,
-  HeaderAd,
-  FooterAd,
-  SidebarAd,
+import {
   ContentAd,
   MobileAd,
   ArticleTopAd,
   ArticleBottomAd,
   BetweenContentAd
 } from '@/components/ui/universal-ad-system';
-import { 
-  NetpubBanner,
+import {
   NetpubMediumRectangle,
   NetpubLeaderboard,
   NetpubLargeRectangle,
-  NetpubHalfPage,
-  NetpubIABBanner,
-  NetpubFixedLeaderboard,
-  NetpubNotificationBanner,
   NetpubSlot6Banner
 } from '@/components/ui/netpub-banner';
 import { AdLayoutWrapper } from '@/components/layout/ad-layout-wrapper';
 import { NetpubDiagnostics } from '@/components/ui/netpub-diagnostics';
-import { ArrowLeft, CheckCircle, XCircle, AlertCircle, RefreshCw, Monitor, Smartphone, Tablet } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Monitor, Smartphone, Tablet } from 'lucide-react';
 
 interface AdTestStatus {
   scriptLoaded: boolean;
@@ -40,7 +30,7 @@ interface AdTestStatus {
 }
 
 export default function AdSystemTestPage() {
-  const [testStatus, setTestStatus] = useState<AdTestStatus>({
+  const [, setTestStatus] = useState<AdTestStatus>({
     scriptLoaded: false,
     netpubObject: false,
     adsVisible: 0,

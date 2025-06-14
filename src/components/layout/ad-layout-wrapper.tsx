@@ -40,7 +40,6 @@ export function AdLayoutWrapper({
   showMobileAds = true,
   sidebarContent,
   className,
-  pageType = 'static',
   fullWidth = false
 }: AdLayoutWrapperProps) {
   const hasSidebar = !fullWidth && (showSidebarAd || sidebarContent);

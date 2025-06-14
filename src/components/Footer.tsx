@@ -74,6 +74,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/ad-slots-demo" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Ad Slots Demo
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
                   Privacy Policy
                 </Link>
