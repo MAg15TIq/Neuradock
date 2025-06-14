@@ -30,7 +30,7 @@ export interface AdVisibilityState {
 
 export interface UseAdVisibilityOptions {
   /** Element reference to monitor */
-  elementRef: React.RefObject<HTMLElement>;
+  elementRef: React.RefObject<HTMLElement | null>;
   /** Slot identifier for debugging */
   slot: string | number;
   /** Whether to start checking immediately */

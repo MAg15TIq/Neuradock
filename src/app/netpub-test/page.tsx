@@ -26,7 +26,7 @@ export default function NetPubTestPage() {
     retryCount: 0,
     netpubObject: false,
     lastEvent: 'Initializing...',
-    networkOnline: navigator?.onLine ?? true,
+    networkOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     events: [],
     errors: []
   });
@@ -47,7 +47,7 @@ export default function NetPubTestPage() {
       retryCount: (window as any).netpubRetryCount || 0,
       netpubObject: !!(window as any).netpub || !!(window as any).NetPub,
       lastEvent: status.lastEvent,
-      networkOnline: navigator.onLine,
+      networkOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
       events: status.events,
       errors: status.errors
     };
