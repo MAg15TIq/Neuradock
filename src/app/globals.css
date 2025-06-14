@@ -456,10 +456,43 @@
   }
 
   /* Hide containers with no meaningful content */
-  .netpub-banner-container ins:not(:has(iframe)):not(:has(script)):not(:has(img)):not(:has(div)) {
+  .netpub-banner-container ins:not(:has(iframe)):not(:has(script)):not(:has(img)):not(:has(div)):not(:has(canvas)):not(:has(video)) {
     display: none !important;
     height: 0 !important;
     min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide containers with only whitespace or minimal content */
+  .netpub-banner-container ins[style*="display: none"],
+  .netpub-banner-container ins[style*="visibility: hidden"],
+  .netpub-banner-container ins[style*="opacity: 0"] {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide containers that are too small to contain meaningful ads */
+  .netpub-banner-container ins[style*="width: 0"],
+  .netpub-banner-container ins[style*="height: 0"] {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide blocked ad containers (common ad blocker patterns) */
+  .netpub-banner-container ins[style*="width: 1px"],
+  .netpub-banner-container ins[style*="height: 1px"] {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   /* Ad Layout Containers */
@@ -503,6 +536,50 @@
   .universal-ad-container:empty {
     display: none !important;
     height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide universal containers that only contain empty ad containers */
+  .universal-ad-container:has(.netpub-banner-container ins:empty):not(:has(.netpub-banner-container ins:not(:empty))) {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide banner placement wrappers with no visible content */
+  .banner-placement:empty {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide ad layout containers when they contain no visible ads */
+  .header-ad-container:has(.universal-ad-container:empty),
+  .footer-ad-container:has(.universal-ad-container:empty),
+  .sidebar-ad-container:has(.universal-ad-container:empty) {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure no layout shift when ads are hidden */
+  .netpub-banner-container[data-ad-hidden="true"] {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide containers marked as blocked */
+  .netpub-banner-container[data-ad-blocked="true"] {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
   }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import {
   NetpubMediumRectangle,
@@ -12,6 +12,7 @@ import {
   NetpubSlot6Banner,
   BannerPlacement
 } from './netpub-banner';
+import { useAdVisibility } from '@/hooks/use-ad-visibility';
 
 export interface UniversalAdProps {
   /** Ad placement strategy */
@@ -48,9 +49,15 @@ export function UniversalAd({
   margin = 'medium',
   position = 'center'
 }: UniversalAdProps) {
-  const [isVisible, setIsVisible] = useState(false); // Start hidden, show only when content loads
   const [isMobile, setIsMobile] = useState(false);
-  const [hasContent, setHasContent] = useState(false);
+
+  // Use the new ad visibility hook
+  const containerRef = useRef<HTMLDivElement>(null);
+  const adVisibility = useAdVisibility({
+    elementRef: containerRef,
+    slot: slot || 'auto',
+    autoStart: true
+  });
 
   useEffect(() => {
     // Check if mobile
@@ -61,56 +68,10 @@ export function UniversalAd({
     checkMobile();
     window.addEventListener('resize', checkMobile);
 
-    // Check for ad content periodically
-    const checkAdContent = () => {
-      const adContainers = document.querySelectorAll('.adv-831b33a650047ee11a992b11fdadd8f3');
-      let foundContent = false;
-
-      adContainers.forEach(container => {
-        const hasChildren = container.children.length > 0;
-        const hasInnerHTML = container.innerHTML.trim().length > 0;
-        const hasIframe = container.querySelector('iframe') !== null;
-        const hasScript = container.querySelector('script') !== null;
-
-        if (hasChildren || hasInnerHTML || hasIframe || hasScript) {
-          foundContent = true;
-        }
-      });
-
-      setHasContent(foundContent);
-
-      // Show the container if we have content OR if we're still in loading phase
-      const netpubFailed = !!(window as any).netpubLoadFailed;
-      const retryCount = (window as any).netpubRetryCount || 0;
-      const stillLoading = !netpubFailed && retryCount < 3;
-
-      setIsVisible(foundContent || stillLoading);
-    };
-
-    // Initial check and periodic checks
-    const timer1 = setTimeout(checkAdContent, 1000);
-    const timer2 = setTimeout(checkAdContent, 3000);
-    const timer3 = setTimeout(checkAdContent, 5000);
-    const timer4 = setTimeout(checkAdContent, 10000);
-
-    // Listen for NetPub events
-    const handleNetpubLoaded = () => {
-      setTimeout(checkAdContent, 500);
-    };
-
-    window.addEventListener('netpubLoaded', handleNetpubLoaded);
-    window.addEventListener('netpubLoadFailed', handleNetpubLoaded);
-
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
       window.removeEventListener('resize', checkMobile);
-      window.removeEventListener('netpubLoaded', handleNetpubLoaded);
-      window.removeEventListener('netpubLoadFailed', handleNetpubLoaded);
     };
-  }, [loading]);
+  }, []);
 
   // Auto-select banner type based on placement, device, and size
   const getBannerComponent = () => {
@@ -183,8 +144,14 @@ export function UniversalAd({
     return null;
   }
 
+  // Don't render if ad visibility hook determines it shouldn't be visible
+  if (!adVisibility.isVisible && !adVisibility.isLoading) {
+    return null;
+  }
+
   return (
     <div
+      ref={containerRef}
       className={cn(
         'universal-ad-container',
         getMarginClasses(),
@@ -192,10 +159,13 @@ export function UniversalAd({
       )}
       data-placement={placement}
       data-size={size}
+      data-ad-visible={adVisibility.isVisible ? 'true' : 'false'}
+      data-ad-loading={adVisibility.isLoading ? 'true' : 'false'}
+      data-ad-blocked={adVisibility.isBlocked ? 'true' : 'false'}
       role="complementary"
       aria-label="Advertisement"
     >
-      {isVisible && (
+      {(adVisibility.isVisible || adVisibility.isLoading) && (
         <BannerPlacement position={position} margin="my-0">
           {getBannerComponent()}
         </BannerPlacement>

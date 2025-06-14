@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { shouldShowAds, shouldShowEmptyContainers, shouldShowDebugInfo, getMaxRetries } from '@/lib/ad-config';
+import { useAdVisibility } from '@/hooks/use-ad-visibility';
 
 export interface NetpubBannerProps {
   /** Banner slot number (1, 2, 3, etc.) */
@@ -46,96 +47,57 @@ export function NetpubBanner({
   const [isClient, setIsClient] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string>('');
-  const [hasAdContent, setHasAdContent] = useState(false);
-  const [shouldRender, setShouldRender] = useState(false);
+
+  // Use the new ad visibility hook
+  const containerRef = useRef<HTMLDivElement>(null);
+  const adVisibility = useAdVisibility({
+    elementRef: containerRef,
+    slot,
+    autoStart: true
+  });
 
   useEffect(() => {
     setIsClient(true);
 
-    // Enhanced script checking with ad content detection
+    // Simplified script checking - main logic now handled by useAdVisibility hook
     const checkScript = () => {
       const script = document.getElementById('831b33a650047ee11a992b11fdadd8f3');
       const scriptExists = !!script;
       const netpubLoaded = !!(window as any).netpubLoaded;
-      const netpubFailed = !!(window as any).netpubLoadFailed;
       const netpubObject = typeof (window as any).netpub !== 'undefined';
-      const retryCount = (window as any).netpubRetryCount || 0;
 
       const isScriptReady = scriptExists && netpubLoaded && netpubObject;
       setScriptLoaded(isScriptReady);
-
-      // Check if ad content is actually loaded
-      const bannerId = containerId || `netpub-banner-slot-${slot}`;
-      const adContainer = document.getElementById(bannerId);
-      const adElement = adContainer?.querySelector('.adv-831b33a650047ee11a992b11fdadd8f3');
-
-      let hasContent = false;
-      if (adElement) {
-        // Check if ad has actual content (not just the empty ins tag)
-        const hasChildren = adElement.children.length > 0;
-        const hasInnerHTML = adElement.innerHTML.trim().length > 0;
-        const hasIframe = adElement.querySelector('iframe') !== null;
-        const hasScript = adElement.querySelector('script') !== null;
-
-        hasContent = hasChildren || hasInnerHTML || hasIframe || hasScript;
-      }
-
-      setHasAdContent(hasContent);
-
-      // Only render if script is ready AND we have content, OR if we're still loading
-      const maxRetries = getMaxRetries();
-      const stillLoading = !netpubFailed && retryCount < maxRetries;
-      const shouldShow = (isScriptReady && hasContent) || (stillLoading && shouldShowEmptyContainers());
-      setShouldRender(shouldShow);
 
       // Enhanced debug information
       const debug = [
         `Script exists: ${scriptExists}`,
         `NetPub loaded: ${netpubLoaded}`,
-        `NetPub failed: ${netpubFailed}`,
         `NetPub object: ${netpubObject}`,
-        `Retry count: ${retryCount}`,
-        `Has content: ${hasContent}`,
-        `Should render: ${shouldShow}`,
-        `Slot: ${slot}`
+        `Slot: ${slot}`,
+        `Visibility: ${adVisibility.isVisible}`,
+        `Has content: ${adVisibility.hasContent}`,
+        `Is loading: ${adVisibility.isLoading}`,
+        `Is blocked: ${adVisibility.isBlocked}`
       ].join(' | ');
 
       setDebugInfo(debug);
-      console.log(`[NetpubBanner Slot ${slot}] ${debug}`);
+
+      if (shouldShowDebugInfo()) {
+        console.log(`[NetpubBanner Slot ${slot}] ${debug}`);
+      }
     };
 
     // Check immediately and after delays
     checkScript();
     const timer1 = setTimeout(checkScript, 1000);
     const timer2 = setTimeout(checkScript, 3000);
-    const timer3 = setTimeout(checkScript, 5000);
-    const timer4 = setTimeout(checkScript, 10000); // Additional check for slower loading ads
-
-    // Listen for NetPub events
-    const handleNetpubLoaded = () => {
-      console.log(`[NetpubBanner Slot ${slot}] NetPub loaded event received`);
-      setTimeout(checkScript, 500);
-    };
-
-    const handleNetpubFailed = () => {
-      console.log(`[NetpubBanner Slot ${slot}] NetPub failed event received`);
-      setTimeout(checkScript, 500);
-    };
-
-    window.addEventListener('netpubLoaded', handleNetpubLoaded);
-    window.addEventListener('netpubLoadFailed', handleNetpubFailed);
-    window.addEventListener('netpubObjectMissing', handleNetpubFailed);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
-      window.removeEventListener('netpubLoaded', handleNetpubLoaded);
-      window.removeEventListener('netpubLoadFailed', handleNetpubFailed);
-      window.removeEventListener('netpubObjectMissing', handleNetpubFailed);
     };
-  }, [slot, desktopSizes, mobileSizes]);
+  }, [slot, adVisibility]);
 
   // Don't render during SSR to avoid hydration mismatches
   if (!isClient) {
@@ -147,8 +109,9 @@ export function NetpubBanner({
     return null;
   }
 
-  // Don't render if we shouldn't show the container
-  if (!shouldRender) {
+  // Don't render if ad visibility hook determines it shouldn't be visible
+  // This includes cases where content is empty, blocked, or failed to load
+  if (!adVisibility.isVisible && !adVisibility.isLoading) {
     return null;
   }
 
@@ -156,7 +119,7 @@ export function NetpubBanner({
   const bannerId = containerId || `netpub-banner-slot-${slot}`;
 
   // Check if we should show fallback content (only in development when enabled)
-  const showFallback = shouldShowEmptyContainers() && !scriptLoaded && (window as any).netpubLoadFailed;
+  const showFallback = shouldShowEmptyContainers() && !scriptLoaded && adVisibility.isBlocked;
 
   // Build the ins element attributes
   const insAttributes: Record<string, string | number | React.CSSProperties> = {
@@ -167,7 +130,7 @@ export function NetpubBanner({
     style: {
       display: 'block',
       textAlign: 'center',
-      minHeight: hasAdContent ? 'auto' : '50px',
+      minHeight: adVisibility.hasContent ? 'auto' : (adVisibility.isLoading ? '50px' : '0'),
       maxWidth: '100%',
       backgroundColor: 'transparent', // Always transparent in production
       border: 'none', // No borders in production
@@ -187,11 +150,15 @@ export function NetpubBanner({
 
   return (
     <div
+      ref={containerRef}
       id={bannerId}
       className={`netpub-banner-container ${className}`}
       data-slot={slot}
       data-desktop-sizes={desktopSizes}
       data-mobile-sizes={mobileSizes}
+      data-ad-hidden={!adVisibility.isVisible ? 'true' : 'false'}
+      data-ad-blocked={adVisibility.isBlocked ? 'true' : 'false'}
+      data-ad-loading={adVisibility.isLoading ? 'true' : 'false'}
     >
       {showFallback ? (
         // Fallback content when ads fail to load
@@ -228,11 +195,14 @@ export function NetpubBanner({
           <div>Desktop: {desktopSizes}</div>
           <div>Mobile: {mobileSizes}</div>
           <div>Script Loaded: {scriptLoaded ? '✅' : '❌'}</div>
-          <div>Has Content: {hasAdContent ? '✅' : '❌'}</div>
-          <div>Should Render: {shouldRender ? '✅' : '❌'}</div>
-          <div>Failed: {(window as any).netpubLoadFailed ? '✅' : '❌'}</div>
-          <div>Retry: {(window as any).netpubRetryCount || 0}</div>
+          <div>Is Visible: {adVisibility.isVisible ? '✅' : '❌'}</div>
+          <div>Has Content: {adVisibility.hasContent ? '✅' : '❌'}</div>
+          <div>Is Loading: {adVisibility.isLoading ? '✅' : '❌'}</div>
+          <div>Is Blocked: {adVisibility.isBlocked ? '✅' : '❌'}</div>
+          <div>Content Type: {adVisibility.contentInfo?.contentType || 'unknown'}</div>
+          <div>Content Size: {adVisibility.contentInfo ? `${adVisibility.contentInfo.contentSize.width}x${adVisibility.contentInfo.contentSize.height}` : 'unknown'}</div>
           <div className="font-mono text-xs break-all mt-1">{debugInfo}</div>
+          <div className="font-mono text-xs break-all mt-1">{adVisibility.debugInfo}</div>
         </div>
       )}
     </div>
