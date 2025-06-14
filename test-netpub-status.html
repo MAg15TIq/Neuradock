@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetPub Status Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>NetPub Status Test</h1>
+    <p>This page tests NetPub script loading and object availability.</p>
+    
+    <button onclick="checkStatus()">Check Status</button>
+    <button onclick="checkScripts()">Check Scripts</button>
+    <button onclick="checkGlobals()">Check Global Objects</button>
+    <button onclick="retryLoad()">Retry Load</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        function checkStatus() {
+            document.getElementById('results').innerHTML = '';
+            log('🔍 Checking NetPub Status...', 'info');
+            
+            // Check global flags
+            const scriptLoaded = window.netpubScriptLoaded;
+            const scriptLoading = window.netpubScriptLoading;
+            const loadFailed = window.netpubLoadFailed;
+            const retryCount = window.netpubRetryCount;
+            
+            log(`Script Loaded: ${scriptLoaded ? '✅' : '❌'} (${scriptLoaded})`, scriptLoaded ? 'success' : 'error');
+            log(`Script Loading: ${scriptLoading ? '⏳' : '❌'} (${scriptLoading})`, scriptLoading ? 'warning' : 'info');
+            log(`Load Failed: ${loadFailed ? '❌' : '✅'} (${loadFailed})`, loadFailed ? 'error' : 'success');
+            log(`Retry Count: ${retryCount || 0}`, 'info');
+            
+            // Check NetPub objects
+            const hasNetpub = typeof window.netpub !== 'undefined';
+            const hasNetPub = typeof window.NetPub !== 'undefined';
+            const hasEngine = typeof window.__npEngineRun_831b33a650047ee11a992b11fdadd8f3 !== 'undefined';
+            
+            log(`NetPub Object: ${hasNetpub ? '✅' : '❌'} (${typeof window.netpub})`, hasNetpub ? 'success' : 'error');
+            log(`NetPub (capital): ${hasNetPub ? '✅' : '❌'} (${typeof window.NetPub})`, hasNetPub ? 'success' : 'error');
+            log(`Engine Flag: ${hasEngine ? '✅' : '❌'} (${hasEngine})`, hasEngine ? 'success' : 'error');
+        }
+        
+        function checkScripts() {
+            log('🔍 Checking Script Elements...', 'info');
+            
+            // Check for NetPub scripts
+            const allScripts = document.querySelectorAll('script');
+            const netpubScripts = Array.from(allScripts).filter(script => 
+                script.src && (
+                    script.src.includes('netpub') || 
+                    script.src.includes('831b33a650047ee11a992b11fdadd8f3') ||
+                    script.id && script.id.includes('netpub')
+                )
+            );
+            
+            log(`Total Scripts: ${allScripts.length}`, 'info');
+            log(`NetPub Scripts: ${netpubScripts.length}`, netpubScripts.length > 0 ? 'success' : 'warning');
+            
+            netpubScripts.forEach((script, index) => {
+                log(`Script ${index + 1}: ID="${script.id}", SRC="${script.src}"`, 'info');
+            });
+            
+            // Check for robust loader script
+            const robustLoader = document.getElementById('netpub-robust-loader');
+            log(`Robust Loader: ${robustLoader ? '✅' : '❌'}`, robustLoader ? 'success' : 'error');
+            
+            // Check for GDPR script
+            const gdprScript = document.getElementById('gdpr-compliance-script');
+            log(`GDPR Script: ${gdprScript ? '✅' : '❌'}`, gdprScript ? 'success' : 'error');
+        }
+        
+        function checkGlobals() {
+            log('🔍 Checking Global Objects...', 'info');
+            
+            const globals = [
+                'netpub', 'NetPub', 'netpubScriptLoaded', 'netpubScriptLoading', 
+                'netpubLoadFailed', 'retryNetpubLoad', 'netpubDiagnostics',
+                '__npEngineRun_831b33a650047ee11a992b11fdadd8f3'
+            ];
+            
+            globals.forEach(global => {
+                const exists = typeof window[global] !== 'undefined';
+                const type = typeof window[global];
+                log(`${global}: ${exists ? '✅' : '❌'} (${type})`, exists ? 'success' : 'error');
+            });
+        }
+        
+        function retryLoad() {
+            log('🔄 Attempting Manual Retry...', 'info');
+            
+            if (typeof window.retryNetpubLoad === 'function') {
+                window.retryNetpubLoad();
+                log('✅ Retry function called', 'success');
+                setTimeout(checkStatus, 2000);
+            } else if (typeof window.retryNetpubRobust === 'function') {
+                window.retryNetpubRobust();
+                log('✅ Robust retry function called', 'success');
+                setTimeout(checkStatus, 2000);
+            } else {
+                log('❌ No retry function available', 'error');
+            }
+        }
+        
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            setTimeout(checkStatus, 1000);
+        });
+        
+        // Listen for NetPub events
+        window.addEventListener('netpubLoaded', (event) => {
+            log(`🎉 NetPub Loaded Event: ${JSON.stringify(event.detail)}`, 'success');
+        });
+        
+        window.addEventListener('netpubLoadFailed', (event) => {
+            log(`❌ NetPub Load Failed Event: ${JSON.stringify(event.detail)}`, 'error');
+        });
+    </script>
+</body>
+</html>

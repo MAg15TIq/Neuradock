@@ -98,26 +98,6 @@ export function Navigation() {
             >
               About
             </Link>
-
-            <Link
-              href="/showcase"
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                isActive("/showcase") ? "text-primary" : "text-muted-foreground"
-              )}
-            >
-              Showcase
-            </Link>
-
-            <Link
-              href="/demo"
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                isActive("/demo") ? "text-primary" : "text-muted-foreground"
-              )}
-            >
-              Demo
-            </Link>
           </div>
 
           {/* Search, Theme Toggle, and Contact Buttons */}
@@ -204,32 +184,6 @@ export function Navigation() {
                 onClick={closeMobileMenu}
               >
                 About
-              </Link>
-
-              <Link
-                href="/showcase"
-                className={cn(
-                  "block px-3 py-2 rounded-md text-base font-medium transition-colors",
-                  isActive("/showcase")
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                )}
-                onClick={closeMobileMenu}
-              >
-                Showcase
-              </Link>
-
-              <Link
-                href="/demo"
-                className={cn(
-                  "block px-3 py-2 rounded-md text-base font-medium transition-colors",
-                  isActive("/demo")
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                )}
-                onClick={closeMobileMenu}
-              >
-                Demo
               </Link>
 
               <Link

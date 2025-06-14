@@ -19,6 +19,7 @@ interface NetpubDiagnostics {
   warnings: string[];
   scriptUrls: string[];
   lastChecked: Date;
+  // Additional diagnostic properties
   netpubRetryCount?: number;
   isOnline?: boolean;
   adBlockerDetected?: boolean;
@@ -49,20 +50,26 @@ export function NetpubDiagnostics() {
     const scriptUrls: string[] = [];
 
     try {
-      // Enhanced NetPub script status checking
-      const scriptLoaded = !!(window as any).netpubLoaded;
-      const scriptFailed = !!(window as any).netpubLoadFailed;
-      const netpubRetryCount = (window as any).netpubRetryCount || 0;
-      const netpubMaxRetries = (window as any).netpubMaxRetries || 3;
+      // Check NetPub script status with simplified implementation
+      const scriptLoaded = !!(window as any).netpubScriptLoaded;
+      const scriptLoading = !!(window as any).netpubScriptLoading;
+      const scriptFailed = !scriptLoaded && !scriptLoading;
 
       // Check if NetPub object exists
       const netpubObject = typeof (window as any).netpub !== 'undefined';
 
-      // Check for NetPub script element
+      // Check for NetPub script elements
       const scriptElement = document.getElementById('831b33a650047ee11a992b11fdadd8f3');
+      const fallbackElement = document.getElementById('831b33a650047ee11a992b11fdadd8f3-fallback');
+
       if (scriptElement) {
         const src = (scriptElement as HTMLScriptElement).src;
         if (src) scriptUrls.push(src);
+      }
+
+      if (fallbackElement) {
+        const src = (fallbackElement as HTMLScriptElement).src;
+        if (src) scriptUrls.push(src + ' (fallback)');
       }
 
       // Count ad containers
@@ -95,16 +102,14 @@ export function NetpubDiagnostics() {
       }
 
       // Enhanced error and warning generation
-      if (scriptFailed) {
-        errors.push(`NetPub script failed to load after ${netpubRetryCount}/${netpubMaxRetries} retry cycles`);
+      if (scriptFailed && !scriptLoading) {
+        errors.push('NetPub script failed to load from all available URLs');
       }
 
-      if (!scriptLoaded && !scriptFailed) {
-        if (netpubRetryCount > 0) {
-          warnings.push(`NetPub script loading in progress (retry ${netpubRetryCount}/${netpubMaxRetries})`);
-        } else {
-          warnings.push('NetPub script has not started loading yet');
-        }
+      if (scriptLoading) {
+        warnings.push('NetPub script is currently loading...');
+      } else if (!scriptLoaded && !scriptFailed) {
+        warnings.push('NetPub script has not started loading yet');
       }
 
       if (scriptLoaded && !netpubObject) {
@@ -153,7 +158,6 @@ export function NetpubDiagnostics() {
         scriptUrls,
         lastChecked: new Date(),
         // Additional diagnostic info
-        netpubRetryCount,
         isOnline,
         adBlockerDetected,
         adsTextStatus

@@ -644,4 +644,162 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* Overlay Ad System Styles */
+  .overlay-ad-container {
+    @apply fixed z-50 pointer-events-auto;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .overlay-ad-container.hidden {
+    @apply opacity-0 pointer-events-none;
+    transform: scale(0.95);
+  }
+
+  .overlay-ad-container.visible {
+    @apply opacity-100;
+    transform: scale(1);
+  }
+
+  /* Overlay Ad Positioning */
+  .overlay-ad-top-left {
+    @apply top-4 left-4;
+  }
+
+  .overlay-ad-top-right {
+    @apply top-4 right-4;
+  }
+
+  .overlay-ad-bottom-left {
+    @apply bottom-4 left-4;
+  }
+
+  .overlay-ad-bottom-right {
+    @apply bottom-4 right-4;
+  }
+
+  .overlay-ad-top-center {
+    @apply top-4 left-1/2 transform -translate-x-1/2;
+  }
+
+  .overlay-ad-bottom-center {
+    @apply bottom-4 left-1/2 transform -translate-x-1/2;
+  }
+
+  .overlay-ad-center-left {
+    @apply top-1/2 left-4 transform -translate-y-1/2;
+  }
+
+  .overlay-ad-center-right {
+    @apply top-1/2 right-4 transform -translate-y-1/2;
+  }
+
+  /* Overlay Ad Controls */
+  .overlay-ad-controls {
+    @apply absolute -top-2 -right-2 flex gap-1;
+  }
+
+  .overlay-ad-control-btn {
+    @apply w-6 h-6 bg-background border border-border rounded-full flex items-center justify-center text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer shadow-sm;
+  }
+
+  .overlay-ad-control-btn:hover {
+    @apply bg-muted text-foreground;
+  }
+
+  /* Overlay Ad Content */
+  .overlay-ad-content {
+    @apply bg-background border border-border rounded-lg shadow-lg overflow-hidden;
+  }
+
+  .overlay-ad-content.minimized {
+    @apply w-12 h-12;
+  }
+
+  .overlay-ad-content.minimized .overlay-ad-banner {
+    @apply hidden;
+  }
+
+  .overlay-ad-banner {
+    @apply block;
+  }
+
+  /* Responsive Overlay Positioning */
+  @media (max-width: 768px) {
+    .overlay-ad-container {
+      @apply scale-90;
+    }
+
+    .overlay-ad-top-left,
+    .overlay-ad-top-right,
+    .overlay-ad-bottom-left,
+    .overlay-ad-bottom-right {
+      @apply top-2 right-2 left-auto bottom-auto;
+    }
+
+    .overlay-ad-center-left,
+    .overlay-ad-center-right {
+      @apply top-auto bottom-2 left-2 right-auto transform-none;
+    }
+  }
+
+  /* Overlay Ad Animation */
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .overlay-ad-slide-in-right {
+    animation: slideInFromRight 0.5s ease-out;
+  }
+
+  .overlay-ad-slide-in-bottom {
+    animation: slideInFromBottom 0.5s ease-out;
+  }
+
+  .overlay-ad-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  /* Ensure overlay ads don't interfere with page content */
+  .overlay-ad-container * {
+    pointer-events: auto;
+  }
+
+  /* Dark mode adjustments for overlay ads */
+  .dark .overlay-ad-content {
+    @apply bg-card border-border;
+  }
+
+  .dark .overlay-ad-control-btn {
+    @apply bg-card border-border;
+  }
 }
